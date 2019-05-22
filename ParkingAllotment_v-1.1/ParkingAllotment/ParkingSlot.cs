@@ -9,56 +9,28 @@ namespace ParkingAllotmentSystem
     public class ParkingSlot
     {
         private List<Vehicle> vehicleList;
-        private int TwoWheelerParkingAreaCapacity { get; set; }
-        private int FourWheelerParkingAreaCapacity { get; set; }
-        private int OtherVehicleParkingAreaCapacity { get; set; }
-        private int TwoWheelerCount;
-        private int FourWheelerCount;
-        private int OtherVehicleCount;
-        private int TotalParkingCapacity;
-        private int TotalVehicleParked;
 
-        public ParkingSlot(int twoWheelerCapacity, int fourWheelerCapacity, int otherVehicleCapacity)
+        public ParkingSlot()
         {
             this.vehicleList = new List<Vehicle>();
-            this.TwoWheelerParkingAreaCapacity = twoWheelerCapacity;
-            this.FourWheelerParkingAreaCapacity = fourWheelerCapacity;
-            this.OtherVehicleParkingAreaCapacity = otherVehicleCapacity;
-            this.TwoWheelerCount = 0;
-            this.FourWheelerCount = 0;
-            this.OtherVehicleCount = 0;
-            this.TotalParkingCapacity = twoWheelerCapacity + fourWheelerCapacity + otherVehicleCapacity;
-            this.TotalVehicleParked = 0;
         }
 
-        public int GetEmptyTwoWheelerSlots()
+        public int GetNumberOfTwoWheelerParked()
         {
-            int count=0;
-            foreach(Vehicle vehicle in vehicleList){
-                if(vehicle.GetNumberOfWheels==VehicleType.TWO_WHEELER)
-                    count++;
-            }
-            return count;
+            IEnumerable<Vehicle> numberOfTwoWheelerParked = from vehicle in vehicleList where vehicle.GetVehicleType() == VehicleType.TWO_WHEELER select vehicle;
+            return numberOfTwoWheelerParked.Count();
         }
 
-        public int GetEmptyFourWheelerSlots()
+        public int GetNumberOfFourWheelerParked()
         {
-            int count=0;
-            foreach(Vehicle vehicle in vehicleList){
-                if(vehicle.GetNumberOfWheels==VehicleType.FOUR_WHEELER)
-                    count++;
-            }
-            return count;
+            IEnumerable<Vehicle> numberOfFourWheelerParked = from vehicle in vehicleList where vehicle.GetVehicleType() == VehicleType.FOUR_WHEELER select vehicle;
+            return numberOfFourWheelerParked.Count();
         }
 
-        public int GetEmptyOtherVehicleSlots()
+        public int GetNumberOfOtherVehicleParked()
         {
-           int count=0;
-            foreach(Vehicle vehicle in vehicleList){
-                if(vehicle.GetNumberOfWheels==VehicleType.OTHER)
-                    count++;
-            }
-            return count;
+            IEnumerable<Vehicle> numberOfOtherVehicleParked = from vehicle in vehicleList where vehicle.GetVehicleType() == VehicleType.OTHER select vehicle;
+            return numberOfOtherVehicleParked.Count();
         }
 
         public List<Vehicle> GetVehicleList()
@@ -66,83 +38,16 @@ namespace ParkingAllotmentSystem
             return vehicleList;
         }
 
-        public bool ParkVehicle(VehicleType vehicleType, string vehicleNumber)
+        public void ParkVehicle(VehicleType vehicleType, string vehicleNumber)
         {
-            if (IsParkingSlotEmpty())
-            {
-                
-                if (vehicleType == VehicleType.TWO_WHEELER && TwoWheelerCount < TwoWheelerParkingAreaCapacity)
-                {
-                    this.TotalVehicleParked += 1;
-                    Vehicle vehicle = new Vehicle(vehicleType, vehicleNumber);
-                    vehicleList.Add(vehicle);
-                    TwoWheelerCount += 1;
-                    return true;
-                }   
-                else if (vehicleType == VehicleType.FOUR_WHEELER && FourWheelerCount < FourWheelerParkingAreaCapacity)
-                {
-                    this.TotalVehicleParked += 1;
-                    Vehicle vehicle = new Vehicle(vehicleType, vehicleNumber);
-                    vehicleList.Add(vehicle);
-                    FourWheelerCount += 1;
-                    return true;
-                }
-                else if (vehicleType == VehicleType.OTHER && OtherVehicleCount < OtherVehicleParkingAreaCapacity)
-                {
-                    this.TotalVehicleParked += 1;
-                    Vehicle vehicle = new Vehicle(vehicleType, vehicleNumber);
-                    vehicleList.Add(vehicle);
-                    OtherVehicleCount += 1;
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                return false;
-            }
+            Vehicle vehicle = new Vehicle(vehicleType, vehicleNumber);
+            vehicleList.Add(vehicle);
         }
 
-        public bool UnParkVehicle(VehicleType vehicleType, string vehicleNumber)
+        public void UnParkVehicle(VehicleType vehicleType, string vehicleNumber)
         {
             Vehicle currentVehicle = new Vehicle(vehicleType, vehicleNumber);
-            foreach (Vehicle vehicle in vehicleList)
-            {
-                //Console.WriteLine("Test ----" + (vehicle.Equals(currentVehicle)));
-                if (vehicle.GetVehicleNumber()==vehicleNumber && vehicle.GetNumberOfWheels()==vehicleType)
-                {
-                    if (vehicleType == VehicleType.TWO_WHEELER && TwoWheelerCount > 0)
-                    {
-                        this.TotalVehicleParked -= 1;
-                        vehicleList.Remove(vehicle);
-                        TwoWheelerCount -= 1;
-                        return true;
-                    }  
-                    else if (vehicleType == VehicleType.FOUR_WHEELER && FourWheelerCount > 0) {
-                        this.TotalVehicleParked -= 1;
-                        vehicleList.Remove(vehicle);
-                        FourWheelerCount -= 1;
-                        return true;
-                    }    
-                    else if (vehicleType == VehicleType.OTHER && OtherVehicleCount > 0)
-                    {
-                        this.TotalVehicleParked -= 1;
-                        vehicleList.Remove(vehicle);
-                        OtherVehicleCount -= 1;
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        private bool IsParkingSlotEmpty()
-        {
-            if (TotalVehicleParked < TotalParkingCapacity)
-                return true;
-            else
-                return false;
+            vehicleList.Remove(currentVehicle);
         }
     }
 }

@@ -8,18 +8,18 @@ namespace ParkingAllotmentSystem
 {
     public class Vehicle
     {
-        private VehicleType NumberOfWheel { get; set; }
+        private VehicleType vehicleType { get; set; }
         private string VehicleNumber { get; set; }
 
         public Vehicle(VehicleType vehicleType, string vehicleNumber)
         {
-            this.NumberOfWheel = vehicleType;
+            this.vehicleType = vehicleType;
             this.VehicleNumber = vehicleNumber;
         }
 
-        public VehicleType GetNumberOfWheels()
+        public VehicleType GetVehicleType()
         {
-            return NumberOfWheel;
+            return vehicleType;
         }
 
         public string GetVehicleNumber()

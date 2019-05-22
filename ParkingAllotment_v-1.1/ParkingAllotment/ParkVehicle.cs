@@ -11,6 +11,9 @@ namespace ParkingAllotmentSystem
         private int SLOT_FULL_ERROR = 1;
         private int VEHICLE_NOT_FOUND_ERROR = 2;
         private int INVALID_CAPACITY_ERROR = 3;
+        private int TwoWheelerCapacity;
+        private int FourWheelerCapacity;
+        private int OtherVehicleCapacity;
 
         public void CreateAllotment(out ParkingSlot parkingSlot)
         {
@@ -26,13 +29,16 @@ namespace ParkingAllotmentSystem
                 (Convert.ToInt32(twoWheeler) > int.MaxValue || Convert.ToInt32(fourWheeler) > int.MaxValue || Convert.ToInt32(otherVehilce) > int.MaxValue) ||
                 (Convert.ToInt32(twoWheeler) < int.MinValue || Convert.ToInt32(fourWheeler) < int.MinValue || Convert.ToInt32(otherVehilce) < int.MinValue))
             {
-                Error(3);
+                Error(INVALID_CAPACITY_ERROR);
                 Console.ReadLine();
                 CreateAllotment(out parkingSlot);
             }
             else
             {
-                parkingSlot = new ParkingSlot(int.Parse(twoWheeler), int.Parse(fourWheeler), int.Parse(otherVehilce));
+                TwoWheelerCapacity = int.Parse(twoWheeler);
+                FourWheelerCapacity = int.Parse(fourWheeler);
+                OtherVehicleCapacity = int.Parse(otherVehilce);
+                parkingSlot = new ParkingSlot();
             }
         }
 
@@ -54,23 +60,41 @@ namespace ParkingAllotmentSystem
 
         public void SelectOption(int choice, ParkingSlot parkingSlot)
         {
+            VehicleType vehicleType;
+            string vehicleNumber;
             switch (choice)
             {
                 case 1:
-                    VehicleType vehicle;
-                    string vehicleNumber = ReadVehicleDetail(out vehicle);
-                    while (vehicle == VehicleType.NONE)
-                        vehicleNumber = ReadVehicleDetail(out vehicle);
-                    if (!parkingSlot.ParkVehicle(vehicle, vehicleNumber))
-                        Error(1);
+                    vehicleNumber = ReadVehicleDetail(out vehicleType);
+                    while (vehicleType == VehicleType.NONE)
+                        vehicleNumber = ReadVehicleDetail(out vehicleType);
+                    if(parkingSlot.GetNumberOfTwoWheelerParked()<TwoWheelerCapacity && vehicleType==VehicleType.TWO_WHEELER){
+                        TwoWheelerCapacity++;
+                        parkingSlot.ParkVehicle(vehicleType, vehicleNumber);
+                    }else if(parkingSlot.GetNumberOfFourWheelerParked()<FourWheelerCapacity && vehicleType==VehicleType.FOUR_WHEELER){
+                        FourWheelerCapacity++;
+                        parkingSlot.ParkVehicle(vehicleType, vehicleNumber);
+                    }else if(parkingSlot.GetNumberOfOtherVehicleParked()<OtherVehicleCapacity && vehicleType==VehicleType.OTHER){
+                        OtherVehicleCapacity++;
+                        parkingSlot.ParkVehicle(vehicleType, vehicleNumber);
+                    }else{
+                        Error(SLOT_FULL_ERROR);
+                    }
                     break;
                 case 2:
-                    VehicleType vehicle2;
-                    string vehicleNumber2 = ReadVehicleDetail(out vehicle2);
-                    while (vehicle2 == VehicleType.NONE)
-                        vehicleNumber2 = ReadVehicleDetail(out vehicle2);
-                    if (!parkingSlot.UnParkVehicle(vehicle2, vehicleNumber2))
-                        Error(2);
+                    vehicleNumber = ReadVehicleDetail(out vehicleType);
+                    bool unParked = false;
+                    while (vehicleType == VehicleType.NONE)
+                        vehicleNumber = ReadVehicleDetail(out vehicleType);
+                    List<Vehicle> vehicleList = parkingSlot.GetVehicleList();
+                    foreach(Vehicle vehicle in vehicleList){
+                        if(vehicle.GetVehicleType().Equals(vehicleType) && vehicle.GetVehicleNumber().Equals(vehicleNumber)){
+                            parkingSlot.UnParkVehicle(vehicleType, vehicleNumber);
+                            unParked = true;
+                        }
+                    }
+                    if(!unParked)
+                        Error(VEHICLE_NOT_FOUND_ERROR);
                     break;
                 case 3:
                     DisplayAllSlots(parkingSlot);
@@ -107,13 +131,13 @@ namespace ParkingAllotmentSystem
         public void DisplayAllSlots(ParkingSlot parkingslot)
         {
             Console.WriteLine("\n\n******************  Parking Alloment Display  ******************");
-            Console.WriteLine("Two Wheeler Parking Empty Slots   = " + parkingslot.GetEmptyTwoWheelerSlots());
-            Console.WriteLine("Four Wheeler Parking Empty Slots  = " + parkingslot.GetEmptyFourWheelerSlots());
-            Console.WriteLine("Other Vehicle Parking Empty Slots = " + parkingslot.GetEmptyOtherVehicleSlots());
+            Console.WriteLine("Two Wheeler Parking Empty Slots   = " + parkingslot.GetNumberOfTwoWheelerParked());
+            Console.WriteLine("Four Wheeler Parking Empty Slots  = " + parkingslot.GetNumberOfFourWheelerParked());
+            Console.WriteLine("Other Vehicle Parking Empty Slots = " + parkingslot.GetNumberOfOtherVehicleParked());
             List<Vehicle> vehicleList = parkingslot.GetVehicleList();
             foreach(Vehicle vehicle in vehicleList)
             {
-                Console.WriteLine("\nslot {0}\nVehicleType {1}\tVehicle no. {2} ",vehicleList.IndexOf(vehicle)+1,vehicle.GetNumberOfWheels(),vehicle.GetVehicleNumber());
+                Console.WriteLine("\nslot {0}\nVehicleType {1}\tVehicle no. {2} ",vehicleList.IndexOf(vehicle)+1,vehicle.GetVehicleType(),vehicle.GetVehicleNumber());
             }
             Console.WriteLine("\n\n");
         }
