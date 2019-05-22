@@ -1,0 +1,7 @@
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\obj\Debug\ParkingAllotment.csprojAssemblyReference.cache
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\obj\Debug\ParkingAllotment.csproj.CoreCompileInputs.cache
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\bin\Debug\ParkingAllotment.exe.config
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\bin\Debug\ParkingAllotment.exe
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\bin\Debug\ParkingAllotment.pdb
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\obj\Debug\ParkingAllotment.exe
+C:\Users\purushotam.s\Desktop\learning\C#\ParkingAllotment\ParkingAllotment\obj\Debug\ParkingAllotment.pdb
