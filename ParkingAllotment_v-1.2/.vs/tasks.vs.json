@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "task-ParkingLot",
+      "appliesTo": "ParkingAllotment/ParkingLot.cs",
+      "type": "launch"
+    }
+  ]
+}
