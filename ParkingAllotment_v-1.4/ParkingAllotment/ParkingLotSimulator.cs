@@ -63,7 +63,7 @@ namespace ParkingAllotmentSystem
                         parkingSlot = ReadVehicleDetail(out vehicleType);
                         while (vehicleType == VehicleType.NONE)
                             parkingSlot = ReadVehicleDetail(out vehicleType);
-                        if(parkingLot.GetNumberOfVehiclesParked(VehicleType.TWO_WHEELER)<TwoWheelerCapacity && parkingLot.GetNumberOfVehiclesParked(VehicleType.FOUR_WHEELER)<FourWheelerCapacity && parkingLot.GetNumberOfVehiclesParked(VehicleType.OTHER)<OtherVehicleCapacity){
+                        if(parkingLot.GetParkingSlotList().Where(e => e.vehicle.vehicleType==VehicleType.TWO_WHEELER).Count()<TwoWheelerCapacity && parkingLot.GetParkingSlotList().Where(e => e.vehicle.vehicleType==VehicleType.FOUR_WHEELER).Count()<FourWheelerCapacity && parkingLot.GetParkingSlotList().Where(e => e.vehicle.vehicleType==VehicleType.OTHER).Count()<OtherVehicleCapacity){
                             parkingLot.ParkVehicle(parkingSlot);
                         }else{
                             Error(SLOT_FULL_ERROR);
@@ -79,6 +79,7 @@ namespace ParkingAllotmentSystem
                         foreach(ParkingSlot slot in slotList){
                             if(slot.vehicle.vehicleType==vehicleType && slot.vehicle.VehicleNumber==parkingSlot.vehicle.VehicleNumber){
                                 parkingLot.UnParkVehicle(slot);
+                                slot.ticket.OutTime = DateTime.Now;
                                 unParked = true;
                             }
                         }
@@ -107,26 +108,27 @@ namespace ParkingAllotmentSystem
             else{
                 vehicleType = VehicleType.NONE;
                 Console.WriteLine("Invalid Choice");
-                return (new ParkingSlot("",new Vehicle(vehicleType,"")));
+                return (new ParkingSlot("",new Vehicle(vehicleType,""),new Ticket("")));
             }
             Console.WriteLine("Enter the vehicle number : ");
             string vehicleNumber = Console.ReadLine();
             Console.WriteLine("Enter the Parking Slot number : ");
             string slotNumber = Console.ReadLine();
-            return(new ParkingSlot(slotNumber,new Vehicle(vehicleType,vehicleNumber)));
+            return(new ParkingSlot(slotNumber,new Vehicle(vehicleType,vehicleNumber), new Ticket(slotNumber)));
         }
 
         public void DisplayAllSlots(ParkingLot parkingLot)
         {
             Console.WriteLine("\n\n******************  Parking Alloment Display  ******************");
-            Console.WriteLine("Two Wheeler Parking Empty Slots   = " + (TwoWheelerCapacity - parkingLot.GetNumberOfVehiclesParked(VehicleType.TWO_WHEELER)));
-            Console.WriteLine("Four Wheeler Parking Empty Slots  = " + (FourWheelerCapacity - parkingLot.GetNumberOfVehiclesParked(VehicleType.FOUR_WHEELER)));
-            Console.WriteLine("Other Vehicle Parking Empty Slots = " + (OtherVehicleCapacity -  parkingLot.GetNumberOfVehiclesParked(VehicleType.FOUR_WHEELER)));
             List<ParkingSlot> slotList = parkingLot.GetParkingSlotList();
+            Console.WriteLine("Two Wheeler Parking Empty Slots   = " + (TwoWheelerCapacity - slotList.Where(e => e.vehicle.vehicleType==VehicleType.TWO_WHEELER).Count()));
+            Console.WriteLine("Four Wheeler Parking Empty Slots  = " + (FourWheelerCapacity - slotList.Where(e => e.vehicle.vehicleType==VehicleType.FOUR_WHEELER).Count()));
+            Console.WriteLine("Other Vehicle Parking Empty Slots = " + (OtherVehicleCapacity -  slotList.Where(e => e.vehicle.vehicleType==VehicleType.OTHER).Count()));
             foreach(ParkingSlot slot in slotList)
             {
                 Console.WriteLine("\n***** Slot Number : {0} *****",slot.SlotId);
                 Console.WriteLine("VehicleType {0}\t\tVehicle no. {1} ",slot.vehicle.vehicleType,slot.vehicle.VehicleNumber);
+                Console.WriteLine("Ticket No: {0}\t\tIn-Time: {1}\t\tOut-Time: {2}",slot.ticket.TicketNumber,slot.ticket.InTime,slot.ticket.OutTime);
             }
             Console.WriteLine("\n\n");
         }

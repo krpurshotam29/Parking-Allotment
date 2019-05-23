@@ -11,11 +11,13 @@ namespace ParkingAllotmentSystem
     {
         public Vehicle vehicle { get; set;}
         public string SlotId { get; set; }
+        public Ticket ticket;
 
-        public ParkingSlot(string slotId, Vehicle vehicle)
+        public ParkingSlot(string slotId, Vehicle vehicle, Ticket ticket)
         {
             this.vehicle = vehicle;
             this.SlotId = slotId;
+            this.ticket = ticket;
         }
     }
 }

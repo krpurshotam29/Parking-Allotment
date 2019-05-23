@@ -15,11 +15,6 @@ namespace ParkingAllotmentSystem
             this.ParkingSlotList = new List<ParkingSlot>();
         }
 
-        public int GetNumberOfVehiclesParked(VehicleType vehicleType)
-        {
-            return (from slot in ParkingSlotList where slot.vehicle.vehicleType == vehicleType select slot).Count();
-        }
-
         public List<ParkingSlot> GetParkingSlotList()
         {
             return ParkingSlotList;

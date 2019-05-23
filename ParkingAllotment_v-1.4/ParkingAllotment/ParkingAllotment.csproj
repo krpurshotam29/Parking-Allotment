@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="ParkingLotSimulator.cs" />
     <Compile Include="Vehicle.cs" />
+    <Compile Include="Ticket.cs" />
     <Compile Include="ParkingArea.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParkingLot.cs" />
