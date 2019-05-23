@@ -133,12 +133,17 @@ namespace ParkingAllotmentSystem
 
         public void Error(int errorID)
         {
-            if (errorID == SLOT_FULL_ERROR)
-                Console.WriteLine("\nAll the solts are full\n");
-            else if (errorID == VEHICLE_NOT_FOUND_ERROR)
-                Console.WriteLine("\nNo vehicle found with the speficied details\n");
-            else if (errorID == INVALID_CAPACITY_ERROR)
-                Console.WriteLine("Invalid capacity of the slots");
+            switch (errorID){
+                case SLOT_FULL_ERROR:
+                    Console.WriteLine("\nAll the solts are full\n");
+                    break;
+                case VEHICLE_NOT_FOUND_ERROR:
+                    Console.WriteLine("\nNo vehicle found with the speficied details\n");
+                    break;
+                case INVALID_CAPACITY_ERROR:
+                    Console.WriteLine("Invalid capacity of the slots");
+                    break;
+            }      
         }
     }
 }
