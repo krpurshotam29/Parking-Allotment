@@ -57,7 +57,12 @@ namespace ParkingAllotmentSystem
                         case 1:
                             //Park Vehicle
                             vehicle = ReadVehicleDetails();
-                            Console.WriteLine("Your Ticket Number is : {0}",parkingLot.Park(vehicle));
+                            ParkingSlot parkingSlot = parkingLot.Park(vehicle);
+                            Console.WriteLine("Do you want ticket ? y/n");
+                            if(Console.ReadLine()=="y"){
+                                Ticket ticket = parkingLot.GenerateTicket(parkingSlot);
+                                Console.WriteLine("Your Ticket Number is : {0}",ticket.TicketNumber);
+                            }
                             break;
                         case 2:
                             //Unpark Vehicle
@@ -111,10 +116,10 @@ namespace ParkingAllotmentSystem
 
         private void DisplaySlots(ParkingLot parkingLot, bool v)
         {
-            IEnumerable<ParkingSlot> slotList = parkingLot.GetParkingSlotList().Where(e => e.Booked == v);
+            IEnumerable<ParkingSlot> slotList = parkingLot.GetParkingSlotList().Where(e => e.IsBooked == v);
             foreach (ParkingSlot slot in slotList)
             {
-                Console.WriteLine("Slot No : {0}\tVehilce type : {1}\tVehicle No : {2}\tBooked : {3}", slot.SlotId, slot.vehicle.vehicleType, slot.vehicle.VehicleNumber, slot.Booked);
+                Console.WriteLine("Slot No : {0}\tVehilce type : {1}\tVehicle No : {2}\tBooked : {3}", slot.SlotId, slot.vehicle.vehicleType, slot.vehicle.VehicleNumber, slot.IsBooked);
             }
         }
 
@@ -124,7 +129,7 @@ namespace ParkingAllotmentSystem
             List<ParkingSlot> parkingSlotList = parkingLot.GetParkingSlotList();
             foreach(ParkingSlot slot in parkingSlotList)
             {
-                Console.WriteLine("Slot No : {0}\tVehilce type : {1}\tVehicle No : {2}\tBooked : {3}",slot.SlotId,slot.vehicle.vehicleType,slot.vehicle.VehicleNumber,slot.Booked);
+                Console.WriteLine("Slot No : {0}\tVehilce type : {1}\tVehicle No : {2}\tBooked : {3}",slot.SlotId,slot.vehicle.vehicleType,slot.vehicle.VehicleNumber,slot.IsBooked);
             }
         }
 

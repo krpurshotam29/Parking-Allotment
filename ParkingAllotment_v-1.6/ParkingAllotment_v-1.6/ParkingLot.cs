@@ -25,46 +25,43 @@ namespace ParkingAllotmentSystem
             TicketList = new List<Ticket>();
         }
 
-        public string Park(Vehicle vehicle)
+        public ParkingSlot Park(Vehicle vehicle)
         {
-            foreach(ParkingSlot parkingSlot in ParkingSlotList)
-            {
-                if(parkingSlot.vehicle.vehicleType==vehicle.vehicleType && !parkingSlot.Booked)
-                {
-                    parkingSlot.vehicle = vehicle;
-                    parkingSlot.Booked = true;
-                    TicketList.Add(new Ticket(vehicle.VehicleNumber, "T"+(TicketList.Count()+1),parkingSlot.SlotId));
-                    return ("T"+(TicketList.Count()));
-                }
+            ParkingSlot freeSlot = ParkingSlotList.Find(e => !e.IsBooked && e.vehicle.vehicleType==vehicle.vehicleType);
+            if(freeSlot!=null){
+                freeSlot.vehicle = vehicle;
+                freeSlot.IsBooked = true;
+                return(freeSlot);
+
+            }else{
+                throw (new Exception("Parking Slots are Full"));
             }
-            throw (new Exception("Parking Slots are Full"));
+        }
+
+        public string GenerateTicket(ParkingSlot parkingSlot){
+            TicketList.Add(new Ticket(parkingSlot.vehicle,"T-"+(TicketList.Count()+1),parkingSlot.SlotId));
+            return("T-"+(TicketList.Count()));
         }
 
         public void UnPark(Vehicle vehicle)
         {
             bool unparked = false;
-            foreach(ParkingSlot parkingSlot in ParkingSlotList)
-            {
-                if(parkingSlot.vehicle.VehicleNumber==vehicle.VehicleNumber && parkingSlot.vehicle.vehicleType == vehicle.vehicleType)
-                {
-                    parkingSlot.vehicle = new Vehicle(vehicle.vehicleType, "");
-                    parkingSlot.Booked = false;
-                    unparked = true;
-                    break;
-                }
-            }
-            if (!unparked)
+            ParkingSlot occupiedSlot = ParkingSlotList.Find(e => e.vehicle.VehicleNumber==vehicle.VehicleNumber && e.vehicle.vehicleType==vehicle.vehicleType);
+            if(occupiedSlot!=null){
+                occupiedSlot.vehicle = new Vehicle(vehicle.vehicleType,"");
+                occupiedSlot.IsBooked = false;
+            }else{
                 throw (new Exception("Vehicle not found"));
+            }
         }
 
         public ParkingSlot GetParkingSlot(Ticket ticket)
         {
-            foreach (ParkingSlot slot in ParkingSlotList)
-            {
-                if(ticket.SlotId==slot.SlotId)
-                    return slot;
-            }
-            throw (new Exception("Ticket not Found"));
+            ParkingSlot parkingSlot = ParkingSlotList.Find(e => e.SlotId == ticket.SlotId);            
+            if(parkingSlot!=null)
+                return(parkingSlot);
+            else
+                throw (new Exception("Ticket not Found"));
         }
 
         public List<ParkingSlot> GetParkingSlotList()
