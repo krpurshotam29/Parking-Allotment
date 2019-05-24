@@ -3,17 +3,18 @@ namespace ParkingAllotmentSystem
 {
     public class Ticket
     {
-        public Vehicle vehicle;
+        public string VehicleNumber;
         public DateTime InTime;
-        public DateTime OutTime { get; set; }
+        public DateTime ? OutTime;
         public string TicketNumber;
         public string SlotId;
 
-        public Ticket(Vehicle vehicle,string ticketNumber,string slotId)
+        public Ticket(string vehicleNumber,string ticketNumber,string slotId)
         {
-            this.vehicle = vehicle;
+            this.VehicleNumber = vehicleNumber;
             this.TicketNumber = ticketNumber;
             InTime = DateTime.Now;
+            OutTime = null;
             this.SlotId = slotId;
         }
     }

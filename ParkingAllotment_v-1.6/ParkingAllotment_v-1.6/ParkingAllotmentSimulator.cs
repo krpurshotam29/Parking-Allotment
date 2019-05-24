@@ -8,7 +8,7 @@ namespace ParkingAllotmentSystem
 {
     class ParkingAllotmentSimulator
     {
-        public void MakeAllotment(out ParkingLot parkingLot)
+        public void CreateSlots(out ParkingLot parkingLot)
         {
             string twoWheelerSlot, fourWheelerSlot, otherVehicleSlot;
             do
@@ -30,6 +30,7 @@ namespace ParkingAllotmentSystem
             parkingLot = new ParkingLot(int.Parse(twoWheelerSlot),int.Parse(fourWheelerSlot),int.Parse(otherVehicleSlot));
         }
 
+
         public void MainMenu(ParkingLot parkingLot)
         {
             Console.Clear();
@@ -45,46 +46,42 @@ namespace ParkingAllotmentSystem
                 Console.WriteLine("7. Exit");
 
                 Vehicle vehicle;
+                
                 try
                 {
-                    string choice = Console.ReadLine();
-                    if (int.Parse(choice) == 7)
+                    int choice = int.Parse(Console.ReadLine());
+                    if (choice == 7)
                         break;
-                    switch (int.Parse(choice))
+                    switch (choice)
                     {
                         case 1:
+                            //Park Vehicle
                             vehicle = ReadVehicleDetails();
-                            try
-                            {
-                                Console.WriteLine("Your Ticket Number is : {0}",parkingLot.Park(vehicle));
-                            }catch(Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
+                            Console.WriteLine("Your Ticket Number is : {0}",parkingLot.Park(vehicle));
                             break;
                         case 2:
+                            //Unpark Vehicle
                             Console.WriteLine("Enter the Ticket Number");
                             string TicketNumber = Console.ReadLine();
-                            try
-                            {
-                                vehicle = parkingLot.GetVehicle(TicketNumber);
-                                parkingLot.UnPark(vehicle);
-                            }
-                            catch(Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
+                            Ticket ticket = parkingLot.GetTicketList().Where(e => e.TicketNumber==TicketNumber).First();
+                            ParkingSlot slot = parkingLot.GetParkingSlot(ticket);
+                            parkingLot.UnPark(slot.vehicle);
+                            ticket.OutTime = DateTime.Now;
                             break;
                         case 3:
+                            //Display All Slots
                             DisplayAllSlots(parkingLot);
                             break;
                         case 4:
+                            //Display All Available Slots
                             DisplaySlots(parkingLot,false);
                             break;
                         case 5:
+                            //Display All Booked Slots
                             DisplaySlots(parkingLot,true);
                             break;
                         case 6:
+                            //Display Tickets
                             DisplayTicket(parkingLot);
                             break;
                         default:
@@ -94,21 +91,23 @@ namespace ParkingAllotmentSystem
                             
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Invalid Choice");
+                    Console.WriteLine(e);
                 }
             }
         }
+
 
         private void DisplayTicket(ParkingLot parkingLot)
         {
             List<Ticket> ticketList = parkingLot.GetTicketList();
             foreach(Ticket ticket in ticketList)
             {
-                Console.WriteLine("Ticket No : {0}\tSlot No : {1}\tVehicle No : {2}\tIn-Time : {3}\tOut-Time : {4}", ticket.TicketNumber,ticket.SlotId,ticket.vehicle.VehicleNumber,ticket.InTime,ticket.OutTime);
+                Console.WriteLine("Ticket No : {0}\tSlot No : {1}\tVehicle No : {2}\tIn-Time : {3}\tOut-Time : {4}", ticket.TicketNumber,ticket.SlotId,ticket.VehicleNumber,ticket.InTime,ticket.OutTime);
             }
         }
+
 
         private void DisplaySlots(ParkingLot parkingLot, bool v)
         {
@@ -119,6 +118,7 @@ namespace ParkingAllotmentSystem
             }
         }
 
+
         private void DisplayAllSlots(ParkingLot parkingLot)
         {
             List<ParkingSlot> parkingSlotList = parkingLot.GetParkingSlotList();
@@ -127,6 +127,7 @@ namespace ParkingAllotmentSystem
                 Console.WriteLine("Slot No : {0}\tVehilce type : {1}\tVehicle No : {2}\tBooked : {3}",slot.SlotId,slot.vehicle.vehicleType,slot.vehicle.VehicleNumber,slot.Booked);
             }
         }
+
 
         private Vehicle ReadVehicleDetails()
         {
@@ -158,6 +159,7 @@ namespace ParkingAllotmentSystem
             
         }
 
+
         private bool IsValidSlot(string s)
         {
             try
@@ -168,7 +170,7 @@ namespace ParkingAllotmentSystem
             }
             catch(Exception)
             {
-                Console.WriteLine("Invalid integer");
+                Console.WriteLine("Invalid number");
             }
             return false;
         }

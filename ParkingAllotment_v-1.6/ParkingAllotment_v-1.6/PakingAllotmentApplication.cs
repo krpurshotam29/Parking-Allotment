@@ -12,7 +12,7 @@ namespace ParkingAllotmentSystem
         {
             ParkingAllotmentSimulator parkingAllotmentSimulator = new ParkingAllotmentSimulator();
             ParkingLot parkingLot;
-            parkingAllotmentSimulator.MakeAllotment(out parkingLot);
+            parkingAllotmentSimulator.CreateSlots(out parkingLot);
             parkingAllotmentSimulator.MainMenu(parkingLot);
         }
     }

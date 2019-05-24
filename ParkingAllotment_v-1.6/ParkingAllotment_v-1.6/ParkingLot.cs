@@ -10,13 +10,11 @@ namespace ParkingAllotmentSystem
     {
         private List<ParkingSlot> ParkingSlotList;
         private List<Ticket> TicketList;
-        private int ticketNumber;
 
         public ParkingLot(int twoWheelerSlot, int fourWheelerslot, int otherVehilceSlot)
         {
             ParkingSlotList = new List<ParkingSlot>();
             int slotId = (new Random()).Next(100);
-            ticketNumber = (new Random()).Next(100,999);
             for (int i = 0; i < twoWheelerSlot; i++)
                 ParkingSlotList.Add(new ParkingSlot(new Vehicle(VehicleType.TWO_WHEELER,""),"S-"+(slotId++)));
             for (int i = 0; i < fourWheelerslot; i++)
@@ -35,8 +33,8 @@ namespace ParkingAllotmentSystem
                 {
                     parkingSlot.vehicle = vehicle;
                     parkingSlot.Booked = true;
-                    TicketList.Add(new Ticket(vehicle, "T"+(ticketNumber++),parkingSlot.SlotId));
-                    return ("T"+(ticketNumber-1));
+                    TicketList.Add(new Ticket(vehicle.VehicleNumber, "T"+(TicketList.Count()+1),parkingSlot.SlotId));
+                    return ("T"+(TicketList.Count()));
                 }
             }
             throw (new Exception("Parking Slots are Full"));
@@ -59,15 +57,12 @@ namespace ParkingAllotmentSystem
                 throw (new Exception("Vehicle not found"));
         }
 
-        public Vehicle GetVehicle(string ticketNumber)
+        public ParkingSlot GetParkingSlot(Ticket ticket)
         {
-            foreach (Ticket ticket in TicketList)
+            foreach (ParkingSlot slot in ParkingSlotList)
             {
-                if (ticket.TicketNumber == ticketNumber)
-                {
-                    ticket.OutTime = DateTime.Now;
-                    return ticket.vehicle;
-                }
+                if(ticket.SlotId==slot.SlotId)
+                    return slot;
             }
             throw (new Exception("Ticket not Found"));
         }
