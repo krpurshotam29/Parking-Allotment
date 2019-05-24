@@ -1,0 +1,7 @@
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\obj\Debug\ParkingAllotmentSystem.csproj.CoreCompileInputs.cache
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\bin\Debug\ParkingAllotmentSystem.exe.config
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\bin\Debug\ParkingAllotmentSystem.exe
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\bin\Debug\ParkingAllotmentSystem.pdb
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\obj\Debug\ParkingAllotmentSystem.csprojAssemblyReference.cache
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\obj\Debug\ParkingAllotmentSystem.exe
+C:\Users\purushotam.s\source\repos\ParkingAllotment_v-1.6\ParkingAllotment_v-1.6\obj\Debug\ParkingAllotmentSystem.pdb
